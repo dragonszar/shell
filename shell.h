@@ -10,17 +10,17 @@ void debug(command command);
 //////////////////////////////////////////////////////////////////////////////////////
 //Struct Declarations
 
-typedef struct command {    // represents a single command to be exec'ed
+typedef struct _command {    // represents a single command to be exec'ed
   char *command;
   char *argument[];
   char *infile;
   char *outfile;
-};
+} command;
 
-typedef struct token    // represents the tokens parsed by flex
+typedef struct _token    // represents the tokens parsed by flex
 {
     int type;  // 1=word, 2=string, 3=meta, 4=comment, 0=end
     char *string;
-};
+} token;
 
 
