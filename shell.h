@@ -15,7 +15,7 @@ typedef struct command {    // represents a single command to be exec'ed
   char *argument[];
   char *infile;
   char *outfile;
-};
+} command;
 
 struct Token    // represents the tokens parsed by flex
 {

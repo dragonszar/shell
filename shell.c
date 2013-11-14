@@ -8,7 +8,7 @@
 #include <cstring>
 #include <string>
 #include <iostream>
-#include "shell_header.h"
+#include "shell.h"
 
 using namespace std;
 
@@ -40,6 +40,8 @@ int main (int argc, char **argv)
 
     ///////////////////////////////////////////////////////////////////////////////////
     //Debug Mode Handler
+    struct command debugtest;
+
     if (debug == true)
     {
 
@@ -96,9 +98,9 @@ bool is_built_in_command(char * command)
 //Function handles  built in commands
 //Input:  A build in command
 //Output: None
-void run_built_in_command(char * command)
+void run_built_in_command(struct command command)
 {
-  char * cmd = command;
+  char * cmd = command.command;
 
   ///////////////////////////////////////////////////////////////////////////////////
   //comment  command
