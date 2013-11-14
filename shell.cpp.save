@@ -3,18 +3,18 @@
 //CS485-1
 //Fall 2013
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
 #include <cstring>
 #include <string>
-#include <iostream>
-#include "shell.h"
 
 using namespace std;
 
+#include "shell.h"
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //Global Variabe
-char *built_in_commands[5] = {"#", "setprompt", "debug", "chdir", "quit"};
+string built_in_commands[5] = {"#", "setprompt", "debug", "chdir", "quit"};
+string prompt =  "iosh% ";
 bool quit = false;
 bool debug = false;
 
@@ -25,13 +25,12 @@ int main (int argc, char **argv)
   while( quit == false )
   {
     int child_pid;
+    cout << prompt;
 
     ///////////////////////////////////////////////////////////////////////////////////
     //Getting Input
-    char cinput[256];
-    scanf("%255[^\n]", cinput);
-    //char cinput[256];
-    //fgets(cinput, sizeof(cinput), stdin);
+    string cinput;
+    cin >> cinput;
 
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -39,12 +38,10 @@ int main (int argc, char **argv)
 
 
     ///////////////////////////////////////////////////////////////////////////////////
-    //Debug Mode Handler
-    struct command debugtest;
-
+    //Debug Mode Handlerd
     if (debug == true)
     {
-
+      //do the debug
     }
 
 
@@ -78,17 +75,12 @@ int main (int argc, char **argv)
 //Input:  a command
 //Output: true if command is built in
 //        false if command is not built in
-bool is_built_in_command(char * command)
+bool is_built_in_command(string command)
 {
-  int i=0;
-  while(built_in_commands[i])
-  {
-    if( strcmp(built_in_commands[i],command) == 0 )
-    {
+  for (int i=0; i<5; i++)
+    if (built_in_commands[i] == command)
       return true;
-    }
-    i++;
-  }
+
   return false;
 }
 
@@ -98,41 +90,42 @@ bool is_built_in_command(char * command)
 //Function handles  built in commands
 //Input:  A build in command
 //Output: None
-void run_built_in_command(struct command command)
+void run_built_in_command(string command)
 {
-  char * cmd = command.command;
+  string cmd = command;
 
   ///////////////////////////////////////////////////////////////////////////////////
   //comment  command
-  if( strcmp(cmd,"#") == 0 )
+  if( cmd=="#" )
   {
     //nothing happens
   }
 
-  if( strcmp(cmd,"setprompt") == 0 )
+  if( cmd=="setprompt" )
   {
-    cout << "This is setprompt\n";
+    cin >> prompt;
+    prompt = prompt + " ";
   }
 
-  if( strcmp(cmd,"debug") == 0 )
+  if( cmd=="debug" )
   {
     //do something about the debug
   }
 
-  if( strcmp(cmd,"chdir") == 0 )
+  if( cmd=="chdir" )
   {
     cout << "This is a change directory\n";
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
   //quit command
-  if( strcmp(cmd,"quit") == 0 )
+  if( cmd=="quit" )
   {
     quit = true;
   }
 }
 
-void run_user_command(char * command)
+void run_user_command(string command)
 {
 
 }
