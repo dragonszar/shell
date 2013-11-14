@@ -10,11 +10,17 @@ void debug(struct command command)
 //////////////////////////////////////////////////////////////////////////////////////
 //Struct Declarations
 
-struct command {      //struct for the a single command
+struct command {    // represents a single command to be exec'ed
   char *command;
   char *argument[];
   char *infile;
   char *outfile;
+};
+
+struct Token    // represents the tokens parsed by flex
+{
+    int type; // 1=word, 2=string, 3=meta, 4=comment, 0=end
+    char *string;
 };
 
 
