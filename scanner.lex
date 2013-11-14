@@ -1,11 +1,7 @@
 %{
-    struct Token
-    {
-        int type; // 1=word, 2=string, 3=meta, 4=comment, 0=end
-        char *string;
-    };
+    #include "shell.h"
 
-    Token tokens[80];
+    token tokens[80];
     int tokenc = 0;
 %}
 
