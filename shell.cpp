@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "command.h"
+#include "command.cpp"
 
 using namespace std;
 
