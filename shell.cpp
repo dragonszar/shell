@@ -27,29 +27,25 @@ int main (int argc, char **argv)
 
     ///////////////////////////////////////////////////////////////////////////////////
     //Getting Input
-    //string cinput;
-    //cin >> cinput;
+    string cinput;
+    cin >> cinput;
 
-    args.push_back("aasdf");
-    Command example("#",args,"","");
-    example.execute();
-    args.pop_front();
+    Command example(cinput);
+    example.execute(); 
 
-    args.push_back("NewP# ")
-    Command example1("setprompt",args,"","");
-    example1.execute();
-    args.pop_front();
+    // Command example2("dir",args,"","");
+    // example2.execute();
 
-    Command example2("dir");
-    example2.execute();
+    // args.push_back("..");
+    // Command example3("chdir",args,"","");
+    // example3.execute();
+    // args.pop_front();
 
-    args.push_back("..");
-    Command example3("chdir",args,"","");
-    example3.execute();
-    args.pop_front();
+    // Command example4("dir",args,"","");
+    // example4.execute();
 
-    Command example4("dir");
-    example4.execute();
+    // Command example5("quit",args,"","");
+    // example5.execute();
 
 
     ///////////////////////////////////////////////////////////////////////////////////
