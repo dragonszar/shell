@@ -27,6 +27,7 @@ int main (int argc, char **argv)
     // Getting Input
     string cinput;
     cin >> cinput;
+    cout cinput;
 
     list<Command> commands = parseForCommands(cinput);
     Command::debug = true;
