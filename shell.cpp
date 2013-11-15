@@ -17,11 +17,14 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
+
+  // Running the shell requires an loop to always get new commands
+
   // Running the shell requires an unterminated loop to get new commands
+
   while( Command::quit == false )
   {
     cout << Command::prompt << " ";
-    int child_pid;
     list<string> args;
 
     // Getting Input
@@ -29,13 +32,29 @@ int main (int argc, char **argv)
     cin >> cinput;
     cout cinput;
 
+
+    //args.push_back("-a");
+    //args.push_back("-l");
+
+
+    Command example("/bin/ls", args, "","");///home/student/Downloads/shell/progoutput.txt");
+    example.execute();
+
+    /*
+    list<Command> commands = parseForCommands(cinput);
+
     list<Command> commands = parseForCommands(cinput);
     Command::debug = true;
+
 
     while (!commands.empty()) {
         commands.front().execute();
         commands.pop_front();
     }
+
+    */
+
+
   }
 }
 

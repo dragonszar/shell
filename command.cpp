@@ -89,20 +89,21 @@ void Command::prepare_argv()
 	char* temp = new char[name.size()+1];
 	strcpy(temp, name.c_str());
 
-	argc = size+1;
+	argc = size+2;
 	argv = new char*[argc];
 	argv[0] = temp;
 
-  list<string>::iterator it = arguments.begin();
+
+ 	list<string>::iterator it = arguments.begin();
 
 	for (int i=0; i<size; i++)
 	{
 		temp = new char[it->size()+1];
 		strcpy (temp, it->c_str());
 		argv[i+1] = temp;
-    it++;
+    		it++;
 	}
-  // argv[size-1] = NULL;
+  	argv[size-1] = NULL;
 
 }
 
@@ -182,29 +183,30 @@ void Command::run_cmd() {
   prepare_argv(); // prepares argv and argc for exec()
 
   pid_t pid;
-  const char *amp;
-  amp = "&";
-  bool found_amp = false;
-  
-  // If we find an ampersand as the last argument, set a flag.
-  if (strcmp(argv[argc-1], amp) == 0)
-    found_amp = true;
+  int in_file;
+  int out_file;
 
   // Fork our process
   pid = fork();
-  
+
   // error
   if (pid < 0)
     perror("Error (pid < 0)");
-  
+
   // child process
-  else if (pid == 0) {
-    // If the last argument is an ampersand, that's a special flag that we
-    // don't want to pass on as one of the arguments.  Catch it and remove
-    // it here.
-    if (found_amp) {
-      argv[argc-1] = NULL;
-      argc--;
+  else if (pid == 0)
+  {
+      // File Redirections
+    if(!infile.empty())
+    {
+      in_file = open(infile.c_str(), O_CREAT | O_RDONLY , S_IREAD | S_IWRITE);
+      dup2(in_file, STDIN_FILENO);
+      close(in_file);
+    }
+    if(!outfile.empty())
+    {
+      out_file = open(outfile.c_str(), O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+      dup2(out_file, STDOUT_FILENO);
     }
 
     execvp(argv[0], argv);
