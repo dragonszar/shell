@@ -17,12 +17,10 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
-
   // Running the shell requires an loop to always get new commands
   while( Command::quit == false )
   {
     cout << Command::prompt << " ";
-    int child_pid;
     list<string> args;
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -30,54 +28,18 @@ int main (int argc, char **argv)
     string cinput;
     cin >> cinput;
 
+    //args.push_back("-a");
+    //args.push_back("-l");
+
+
+    Command example("/bin/ls", args, "","");///home/student/Downloads/shell/progoutput.txt");
+    example.execute();
+
+    /*
     list<Command> commands = parseForCommands(cinput);
     while (!commands.empty()) {
         commands.front().execute();
         commands.pop_front();
-    }
-
-    // Command example(cinput);
-    // example.execute(); 
-
-    // Command example2("dir",args,"","");
-    // example2.execute();
-
-    // args.push_back("..");
-    // Command example3("chdir",args,"","");
-    // example3.execute();
-    // args.pop_front();
-
-    // Command example4("dir",args,"","");
-    // example4.execute();
-
-    // Command example5("quit",args,"","");
-    // example5.execute();
-
-
-    ///////////////////////////////////////////////////////////////////////////////////
-    //Send cinput to the Scanner and Parse here
-
-
-    ///////////////////////////////////////////////////////////////////////////////////
-    //Run Command
-    /*
-    if (true)//check if built in command
-    {
-      //run built in command
-    }
-    else
-    {   
-	    child_pid = fork();
-        if (child_pid == 0)
-		{
-		  run_user_command(command);
-		}
-		else
-		{
-		  wait(child_pid);
-		  exit(0);
-		}
-        
     }
     */
   }

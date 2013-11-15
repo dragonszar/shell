@@ -76,8 +76,8 @@ void Command::run_debug()
 	argv = new char*[argc];
 	argv[0] = temp;
 
-
-	cout << "Command: " << name << endl;
+  if (debug == true)
+	  cout << "Command: " << name << endl;
 
 	for (int i=0; i<size; i++)
 	{
@@ -172,6 +172,8 @@ void Command::run_cmd(int argc, char** argv) {
   const char *amp;
   amp = "&";
   bool found_amp = false;
+  int in_file;
+  int out_file;
   
   // If we find an ampersand as the last argument, set a flag.
   if (strcmp(argv[argc-1], amp) == 0)
@@ -185,7 +187,21 @@ void Command::run_cmd(int argc, char** argv) {
     perror("Error (pid < 0)");
   
   // child process
-  else if (pid == 0) {
+  else if (pid == 0) 
+  {
+      // File Redirections
+    if(!infile.empty())
+    {
+      in_file = open(infile.c_str(), O_CREAT | O_RDONLY , S_IREAD | S_IWRITE);
+      dup2(in_file, STDIN_FILENO);
+      close(in_file);
+    }
+    if(!outfile.empty())
+    {
+      out_file = open(outfile.c_str(), O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+      dup2(out_file, STDOUT_FILENO);
+    }
+    
     // If the last argument is an ampersand, that's a special flag that we
     // don't want to pass on as one of the arguments.  Catch it and remove
     // it here.
