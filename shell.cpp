@@ -23,6 +23,7 @@ int main (int argc, char **argv)
   while( Command::quit == false )
   {
     int child_pid;
+    list<string> args;
 
     ///////////////////////////////////////////////////////////////////////////////////
     //Getting Input
@@ -30,7 +31,21 @@ int main (int argc, char **argv)
     cin >> cinput;
 
     Command example(cinput);
-    example.execute();
+    example.execute(); 
+
+    // Command example2("dir",args,"","");
+    // example2.execute();
+
+    // args.push_back("..");
+    // Command example3("chdir",args,"","");
+    // example3.execute();
+    // args.pop_front();
+
+    // Command example4("dir",args,"","");
+    // example4.execute();
+
+    // Command example5("quit",args,"","");
+    // example5.execute();
 
 
     ///////////////////////////////////////////////////////////////////////////////////
