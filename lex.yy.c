@@ -784,27 +784,26 @@ case 4:
 YY_RULE_SETUP
 #line 37 "lex.yy.txt"
 {  // end of line
-            std::string text = yytext;
-            Token tkn (text, CTEOL);
+            Token tkn (std::string(""), CTEOL);
             lex_tokens.push_back(tkn);
             }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 43 "lex.yy.txt"
+#line 42 "lex.yy.txt"
 // eat up whitespace
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 45 "lex.yy.txt"
+#line 44 "lex.yy.txt"
 printf( "Unrecognized character: %s\n", yytext );
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 47 "lex.yy.txt"
+#line 46 "lex.yy.txt"
 ECHO;
 	YY_BREAK
-#line 808 "lex.yy.c"
+#line 807 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1802,7 +1801,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 47 "lex.yy.txt"
+#line 46 "lex.yy.txt"
 
 
 
