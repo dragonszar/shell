@@ -3,11 +3,11 @@ PROGRAM=ioshell
 ShellSource=shell.cpp
 ShellOut=shell.o
 
-CmdSource=command.h
+CmdSource=command.cpp
 CmdOut=command.o
 
-ScanSource=scanner.cpp
-ScanOut=scanner.o
+ScanSource=parser.cpp
+ScanOut=parser.o
 
 FlexIn=lex.yy.txt
 FlexOut=lex.yy.c
@@ -17,7 +17,7 @@ run: all
 	./$(PROGRAM)
 
 all: $(ShellOut) $(ScanOut) $(CmdOut)
-	g++ $(CmdOut) $(ShellOut) -lfl -o $(PROGRAM)
+	g++ $(ShellOut) -lfl -o $(PROGRAM)
 	# -lfl loads flex libraries so ScanOut links properly.
 
 $(ShellOut): $(ShellSource)

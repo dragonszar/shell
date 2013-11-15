@@ -1,7 +1,7 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include "scanner.cpp"
+#include "parser.cpp"
 #include "token.cpp"
 
 using namespace std;

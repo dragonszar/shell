@@ -1,3 +1,6 @@
+#ifndef COMMAND_CPP
+#define COMMAND_CPP
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -132,24 +135,31 @@ bool Command::run_built_in_command(string command)
   	int result = chdir(directory);
   	if (result != 0)
   	{
-  		cout << "Problem with changing directory.\n";
+  		cout << "Problem with changing directory." << endl;;
   	}
   	flag = true;
   }
 
   if( cmd=="dir" )
   {	
-    cout << "Directory Listing: " << get_current_dir_name() << "\n";
+    cout << "Directory Listing: " << get_current_dir_name() << endl;
     flag = true;
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////
   //quit command
   if( cmd=="quit" )
   {
-    quit = true;
     flag = true;
+    quit = true;
   }
+
+  if (cmd=="PARSE_ERROR")
+  {
+    cout << "Parse error: " << arguments.front() << endl;
+    flag = true;
+    quit = true;
+  }
+
   return flag;
 }
 
@@ -191,3 +201,5 @@ void Command::run_cmd(int argc, char** argv) {
   } else if (!found_amp)
     waitpid(pid, NULL, 0); // only wait if no ampersand
 }
+
+#endif

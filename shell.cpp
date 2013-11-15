@@ -10,6 +10,7 @@
 #include <unistd.h>
 
 #include "command.cpp"
+#include "parser.cpp"
 
 using namespace std;
 
@@ -17,21 +18,26 @@ using namespace std;
 int main (int argc, char **argv)
 {
 
-  cout << Command::prompt << " ";
-
-  //Runnin the shell requires an loop to always get new commands
+  // Running the shell requires an loop to always get new commands
   while( Command::quit == false )
   {
+    cout << Command::prompt << " ";
     int child_pid;
     list<string> args;
 
     ///////////////////////////////////////////////////////////////////////////////////
-    //Getting Input
+    // Getting Input
     string cinput;
     cin >> cinput;
 
-    Command example(cinput);
-    example.execute(); 
+    list<Command> commands = parseForCommands(cinput);
+    while (!commands.empty()) {
+        commands.front().execute();
+        commands.pop_front();
+    }
+
+    // Command example(cinput);
+    // example.execute(); 
 
     // Command example2("dir",args,"","");
     // example2.execute();
@@ -74,8 +80,6 @@ int main (int argc, char **argv)
         
     }
     */
-
-    cout << Command::prompt << " ";
   }
 }
 
