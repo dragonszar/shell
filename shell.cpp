@@ -6,21 +6,16 @@
 #include <iostream>
 #include <cstring>
 #include <string>
+#include <stdio.h>
+#include <unistd.h>
 
 using namespace std;
 
 #include "shell.h"
-/*
-//////////////////////////////////////////////////////////////////////////////////$
-//Function Prototypes
-bool is_built_in_command(string command);   //Determines if command is a built in $
-void run_built_in_command(string command);  //Perfoms the Built-In command
-void run_user_command(string command);      //Running user command
-*/
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //Global Variabe
-string built_in_commands[5] = {"#", "setprompt", "debug", "chdir", "quit"};
+string built_in_commands[6] = {"#", "setprompt", "debug", "chdir", "quit", "dir"};
 string prompt =  "iosh% ";
 bool quit = false;
 bool debug = false;
@@ -28,11 +23,13 @@ bool debug = false;
 int main (int argc, char **argv)
 {
 
+  cout << prompt << " ";
+
   //Runnin the shell requires an loop to always get new commands
   while( quit == false )
   {
     int child_pid;
-    cout << prompt;
+    
 
     ///////////////////////////////////////////////////////////////////////////////////
     //Getting Input
@@ -60,18 +57,20 @@ int main (int argc, char **argv)
     }
     else
     {   /*
-	child_pid = fork();
+	    child_pid = fork();
         if (child_pid == 0)
-	{
-	  run_user_command(command);
-	}
-	else
-	{
-	  wait(child_pid);
-	  exit(0);
-	}
+		{
+		  run_user_command(command);
+		}
+		else
+		{
+		  wait(child_pid);
+		  exit(0);
+		}
         */
     }
+
+    cout << prompt << " ";
   }
 }
 
@@ -84,7 +83,7 @@ int main (int argc, char **argv)
 //        false if command is not built in
 bool is_built_in_command(string command)
 {
-  for (int i=0; i<5; i++)
+  for (int i=0; i<6; i++)
     if (built_in_commands[i] == command)
       return true;
 
@@ -121,7 +120,22 @@ void run_built_in_command(string command)
 
   if( cmd=="chdir" )
   {
-    cout << "This is a change directory\n";
+  	string temp;
+  	cin >> temp;
+  	char * directory = new char[temp.size()+1];
+  	strcpy (directory, temp.c_str());
+
+
+  	int result = chdir(directory);
+  	if (result != 0)
+  	{
+  		cout << "Problem with changing directory.\n";
+  	}
+  }
+
+  if( cmd=="dir" )
+  {	
+    cout << "Directory Listing: " << get_current_dir_name() << "\n";
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
