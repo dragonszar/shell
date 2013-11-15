@@ -1,8 +1,23 @@
 %{
-    #include "shell.h"
+#include <string>
+#include <list>
 
-    token tokens[80];
-    int tokenc = 0;
+enum commandType { CTWord, CTString, CTMeta, CTComment, CTEOL };
+
+class Token {
+public:
+    Token(std::string, commandType);
+
+    commandType type;
+    std::string text;
+};
+
+Token::Token(std::string txt, commandType tp) { type=tp; text=txt; }
+
+std::list<Token> Tokens;
+
+/**/
+
 %}
 
 DIGIT    [0-9]
@@ -12,44 +27,39 @@ ESCMETA  [\\\s\\<\\>\\#]
 
 %%
 
-{NORMAL}+[{NORMAL}|{ESCMETA}]*    {
-                printf("A word: %s\n", yytext);
-                Token token;
-                token.string = yytext;
-                token.type = 1;
-                tokens[tokenc++] = token;
+{NORMAL}+[{NORMAL}|{ESCMETA}]*    {  // word
+                //printf("A word: %s\n", yytext);
+                std::string text = yytext;
+                Token tkn (text, CTWord);
+                Tokens.push_back(tkn);
                 }
 
-\"([^"\\]*(\\.[^"\\]*)*)\"        {
-                printf("A string: %s\n", yytext);
-                Token token;
-                token.string = yytext;
-                token.type = 2;
-                tokens[tokenc++] = token;
+\"([^"\\]*(\\.[^"\\]*)*)\"        {  // string
+                //printf("A string: %s\n", yytext);
+                std::string text = yytext;
+                Token tkn (text, CTString);
+                Tokens.push_back(tkn);
                 }
 
-{META}          {
-                printf("A meta: %s\n", yytext);
-                Token token;
-                token.string = yytext;
-                token.type = 3;
-                tokens[tokenc++] = token;
+{META}          {  // meta-character
+                //printf("A meta: %s\n", yytext);
+                std::string text = yytext;
+                Token tkn (text, CTMeta);
+                Tokens.push_back(tkn);
                 }
 
-^#[.\t ]*$      {
-                printf("A comment: %s\n", yytext);
-                Token token;
-                token.string = yytext;
-                token.type = 4;
-                tokens[tokenc++] = token;
+^#[.\t ]*$      {  // comment
+                //printf("A comment: %s\n", yytext);
+                std::string text = yytext;
+                Token tkn (text, CTComment);
+                Tokens.push_back(tkn);
                 }
 
-\n+             {
-                printf("A new line\n");
-                Token token;
-                token.string = yytext;
-                token.type = 0;
-                tokens[tokenc++] = token;
+\n+             {  // end of line
+                //printf("A new line\n");
+                std::string text = yytext;
+                Token tkn (text, CTEOL);
+                Tokens.push_back(tkn);
                 }
 
 [\t ]+          /* eat up whitespace */
@@ -58,10 +68,12 @@ ESCMETA  [\\\s\\<\\>\\#]
 
 %%
 
-int main( int argc, char **argv )
+std::list<Token> scan(std::string input)
 {
-    char string[] = "/bin/cat < \"hello world\"";
-    YY_BUFFER_STATE yybuf = yy_scan_string(string);
+    // char string[] = "/bin/cat < \"hello world\"";
+    const char *cstr = input.c_str();
+    YY_BUFFER_STATE yybuf = yy_scan_string(cstr);
     yylex();
     yy_delete_buffer(yybuf);
+    return Tokens;
 }

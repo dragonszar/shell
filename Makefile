@@ -12,7 +12,7 @@ all: scanner
 scanner: $(ScannerObj)
 	g++ $(ScannerObj) -lfl -o $(PROGRAM)
 
-scanner.o:
+scanner.o: $(FlexIn)
 	flex -o $(FlexOut) $(FlexIn)
 	g++ -c $(FlexOut)
 
