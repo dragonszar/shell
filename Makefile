@@ -1,20 +1,31 @@
-PROGRAM=scanner
+PROGRAM=ioshell
 
-FlexOut=scanner.c
 FlexIn=scanner.lex
-ScannerObj=scanner.o
+FlexOut=scanner.cpp
+ScanOut=scanner.o
+
+ShellOut=shell.o
+ShellSource=shell.cpp
+
+CmdObj=command.o
+CmdSource=command.h
+
 
 run: all
 	./$(PROGRAM)
 
-all: scanner
+all: $(ShellOut) $(ScanOut) $(CmdOut)
+	g++ $(CmdOut) $(ScanOut) $(ShellOut) -lfl -o $(PROGRAM)
 
-scanner: $(ScannerObj)
-	g++ $(ScannerObj) -lfl -o $(PROGRAM)
-
-scanner.o: $(FlexIn)
+$(ScanOut): $(FlexIn)
 	flex -o $(FlexOut) $(FlexIn)
 	g++ -c $(FlexOut)
+
+$(CmdOut): $(CmdSource)
+	g++ -c $(CmdSource)
+
+$(ShellOut): $(ShellSource)
+	g++ -c $(ShellSource)
 
 clean:
 	rm *.o $(PROGRAM)
