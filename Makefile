@@ -16,7 +16,7 @@ FlexOut=lex.yy.c
 run: all
 	./$(PROGRAM)
 
-all: $(ShellOut) $(ScanOut) $(CmdOut)
+all: $(ShellOut) $(CmdOut) $(ScanOut) $(FlexOut)
 	g++ $(ShellOut) -lfl -o $(PROGRAM)
 	# -lfl loads flex libraries so ScanOut links properly.
 
@@ -29,12 +29,14 @@ $(CmdOut): $(CmdSource)
 $(ScanOut): $(FlexOut) $(ScanSource)
 	g++ -c $(ScanSource)
 
+flex: $(FlexOut)
+
 $(FlexOut): $(FlexIn)
 	flex -o $(FlexOut) $(FlexIn)
 
 
 clean:
-	rm $(FlexOut) $(PROGRAM) *.o
+	rm $(PROGRAM) *.o
 
 
 scans: $(ScanOut) scanstub.cpp

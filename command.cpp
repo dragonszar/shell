@@ -23,8 +23,9 @@ public:
     Command (string n, list<string> arg, string in, string out);
     void execute();
     bool run_built_in_command(string command);
-    void run_debug();
-    void run_cmd(int argc, char** argv);
+    void prepare_argv();
+    void run_cmd();
+    string to_string();
 
 
     static string prompt;
@@ -57,41 +58,52 @@ Command::Command (string n, list<string> arg, string in, string out)
 // Executing the command
 void Command::execute() 
 { 
-	run_debug();
+  if (debug) cout << to_string() << endl;
 	
-    if( run_built_in_command(name) != true)
-    {
-    	run_cmd(argc, argv);
-    }   
+  if( run_built_in_command(name) != true)
+  {
+  	run_cmd();
+  }   
 }
 
-void Command::run_debug()
+string Command::to_string()
+{
+  string s = "Command: ";
+  s += name;
+
+  for (list<string>::iterator it = arguments.begin(); it != arguments.end(); ++it)
+  {
+    s += " ";
+    s += *it;
+  }
+  
+  if (!infile.empty())  s += string(" < ").append(infile);
+  if (!outfile.empty()) s += string(" > ").append(outfile);
+  return s;
+}
+
+void Command::prepare_argv()
 {
 	list<string> tempargs;
 	int size = arguments.size();
 	char* temp = new char[name.size()+1];
-	strcpy (temp,name.c_str());
+	strcpy(temp, name.c_str());
 
 	argc = size+1;
 	argv = new char*[argc];
 	argv[0] = temp;
 
-
-	cout << "Command: " << name << endl;
+  list<string>::iterator it = arguments.begin();
 
 	for (int i=0; i<size; i++)
 	{
-		string currentarg = arguments.front();
-		if (debug == true)
-			cout << "Token " << i << ": " << currentarg << endl;
-		arguments.pop_front();
-		tempargs.push_back(currentarg);
-
-		temp = new char[currentarg.size()+1];
-		strcpy (temp,currentarg.c_str());
+		temp = new char[it->size()+1];
+		strcpy (temp, it->c_str());
 		argv[i+1] = temp;
+    it++;
 	}
-	arguments = tempargs;
+  // argv[size-1] = NULL;
+
 }
 
 
@@ -163,11 +175,12 @@ bool Command::run_built_in_command(string command)
   return flag;
 }
 
-// Given the number of arguments (argc) and an array of arguments (argv),
-// this will fork a new process and run those arguments.
+// this will fork a new process and run the arguments held in argv and argc.
 // Thanks to http://tldp.org/LDP/lpg/node11.html for their tutorial on pipes
 // in C, which allowed me to handle user input with ampersands.
-void Command::run_cmd(int argc, char** argv) {
+void Command::run_cmd() {
+  prepare_argv(); // prepares argv and argc for exec()
+
   pid_t pid;
   const char *amp;
   amp = "&";

@@ -35,12 +35,11 @@ WORD     {NORMAL}+[{NORMAL}|{ESCMETA}]*
             }
 
 \n+         {  // end of line
-            std::string text = yytext;
-            Token tkn (text, CTEOL);
+            Token tkn (std::string(""), CTEOL);
             lex_tokens.push_back(tkn);
             }
 
-[\t ]+      // eat up whitespace
+[ \t]+      // eat up whitespace
 
 .           printf( "Unrecognized character: %s\n", yytext );
 
