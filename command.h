@@ -31,6 +31,13 @@ bool Command::quit = false;
 // Constructor
 Command::Command (string n) { name = n; }
 Command::~Command () {}
+Command::Command (string n, list<string> arg, string in, string out) 
+{ 
+	name = n; 
+	arguments = arg;
+	infile = in;
+	outfile = out;
+}
 
 
 // Executing the command
@@ -38,7 +45,7 @@ bool Command::execute()
 { 
 	if(debug == true)
 	{
-		//print out the tokenss
+		
 	}
     run_built_in_command(name);
     return true; 
@@ -55,7 +62,7 @@ bool Command::execute()
 void Command::run_built_in_command(string command)
 {
   string cmd = command;
-  
+
   if( cmd=="#" )
   {
     //nothing happens
@@ -63,22 +70,23 @@ void Command::run_built_in_command(string command)
 
   if( cmd=="setprompt" )
   {
-    cin >> prompt;
-    prompt = prompt + " ";
+    prompt = arguments.front();
   }
 
   if( cmd=="debug" )
   {
     //do something about the debug
+    if (arguments.front()==false)
+    	debug = true;
+    if (arguments.front()==true)
+    	debug = false;
   }
 
   if( cmd=="chdir" )
   {
-  	string temp;
-  	cin >> temp;
+  	string temp = arguments.front();
   	char * directory = new char[temp.size()+1];
   	strcpy (directory, temp.c_str());
-
 
   	int result = chdir(directory);
   	if (result != 0)
