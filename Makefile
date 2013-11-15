@@ -14,7 +14,7 @@ CmdSource=command.h
 run: all
 	./$(PROGRAM)
 
-all: ShellOut ScanOut CmdOut
+all: $(ShellOut) $(ScanOut) $(CmdOut)
 	g++ $(CmdOut) $(ScanOut) $(ShellOut) -lfl -o $(PROGRAM)
 
 $(ScanOut): $(FlexIn)
