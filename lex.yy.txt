@@ -1,0 +1,48 @@
+%top{
+#include <string>
+#include <list>
+#include "token.cpp"
+
+std::list<Token> lex_tokens;
+
+}
+
+DIGIT    [0-9]
+META     [<>#]
+ESCMETA  [\\\s\\<\\>\\#]
+NORMAL   [^<># \t\n\r\0'"]
+STRING   \"([^"\\]*(\\.[^"\\]*)*)\"
+WORD     {NORMAL}+[{NORMAL}|{ESCMETA}]*
+
+%%
+
+{WORD}      {
+            std::string text = yytext;
+            Token tkn (text, CTWord);
+            lex_tokens.push_back(tkn);
+            }
+
+{STRING}    {
+            std::string text = yytext;
+            Token tkn (text, CTString);
+            lex_tokens.push_back(tkn);
+            }
+
+{META}      {
+            std::string text = yytext;
+            Token tkn (text, CTMeta);
+            lex_tokens.push_back(tkn);
+            }
+
+\n+         {  // end of line
+            std::string text = yytext;
+            Token tkn (text, CTEOL);
+            lex_tokens.push_back(tkn);
+            }
+
+[\t ]+      // eat up whitespace
+
+.           printf( "Unrecognized character: %s\n", yytext );
+
+%%
+
