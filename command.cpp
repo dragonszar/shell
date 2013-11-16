@@ -1,45 +1,64 @@
+//Shell Program
+//Authors: Michael and Frank
+//CS485-1
+//Fall 2013
+
 #ifndef COMMAND_CPP
 #define COMMAND_CPP
 
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sys/stat.h>
-#include <cerrno>
-#include <fcntl.h> 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <cstring>
-#include <list>
-#include <unistd.h>
+#include <string>       //For String
+#include <iostream>     //For standard output
+#include <fstream>      //For file redirections
+#include <sys/stat.h>   ///
+#include <cerrno>       ///
+#include <fcntl.h>      /// For Forkings, PID, Wait......
+#include <sys/types.h>  ///
+#include <sys/wait.h>   ///
+#include <cstring>      //For Chracter string
+#include <list>         //For List Support
+#include <unistd.h>     //For Directory
+#include <stdio.h>      ///
+#include <stdlib.h>     /// 
 
 using namespace std;
 
 class Command
 {
 public:
+    //Constructor/Destructor
     Command ();
     Command (string);
-    ~Command ();
     Command (string n, list<string> arg, string in, string out);
+    ~Command ();
+    
+    
+    //For Running Commands
     void execute();
-    bool run_built_in_command(string command);
+    //Converting argument list to an array of character arrays
     void prepare_argv();
+    //Running User Commands
     void run_cmd();
-    string to_string();
+    //For Running Built in Commands
+    bool run_built_in_command(string command);
 
+    //string to_string();
 
-    static string prompt;
-    static bool debug;
-    static bool quit;
-    string name;
-    list<string> arguments;
-    string infile;
-    string outfile;
-    char** argv;
-    int argc;
+    static string prompt;   //Used for storing current prompt
+    static bool debug;      //Used for activating debug
+    static bool quit;       //Used for contolling while loop in main
+
+    list<string> arguments; //argument for this comand
+
+    string name;            //command name
+    string infile;          //full directory of infile
+    string outfile;         //full directory of outfile
+
+    char** argv;            //arguments 1.command ... arguments.... last-NULL
+    int argc;               //number of arguments in argv
 };
 
+
+//Setting initial conditions for the shell
 string Command::prompt =  "iosh% ";
 bool Command::debug = false;
 bool Command::quit = false;
@@ -57,36 +76,28 @@ Command::Command (string n, list<string> arg, string in, string out)
 }
 
 
-// Executing the command
+//////////////////////////////////////////////////////////////////////////////////////
+//Function handles execution of the command. It first runs the command name through
+//run_built_in_command to see if the command. If the current command is not built in
+//it will run run_cmd as a user command;
+//Input:  None
+//Output: None
 void Command::execute() 
 { 
-  // if (debug) cout << to_string() << endl;
-	
   if( run_built_in_command(name) != true)
   {
   	run_cmd();
   }   
 }
 
-string Command::to_string()
-{
-  string s = "Command: ";
-  s += name;
 
-  for (list<string>::iterator it = arguments.begin(); it != arguments.end(); ++it)
-  {
-    s += " ";
-    s += *it;
-  }
-  
-  if (!infile.empty())  s += string(" < ").append(infile);
-  if (!outfile.empty()) s += string(" > ").append(outfile);
-  return s;
-}
-
+//////////////////////////////////////////////////////////////////////////////////////
+//Function takes the argument list, and converts it into an array of character arrays
+//argv and store the number of members in argc
+//Input:  None
+//Output: None
 void Command::prepare_argv()
 {
-	list<string> tempargs;
 	int size = arguments.size();
 	char* temp = new char[name.size()+1];
 	strcpy(temp, name.c_str());
@@ -110,29 +121,31 @@ void Command::prepare_argv()
 
 
 //////////////////////////////////////////////////////////////////////////////////////
-//Function handles  built in commands
-//Input:  A build in command
+//Function takes a function name and match it against a built in command to run.
+//Input:  A command name
 //Output: None
 bool Command::run_built_in_command(string command)
 {
   string cmd = command;
   bool flag = false;
 
+  //comment command
   if( cmd=="#" )
   {
     //nothing happens
     flag = true;
   }
 
+  //Changing the prompt
   if( cmd=="setprompt" )
   {
     prompt = arguments.front();
     flag = true;
   }
 
+  //Turning on/off the Debug
   if( cmd=="debug" )
   {
-    //do something about the debug
     if (arguments.front()=="on")
     	debug = true;
     if (arguments.front()=="off")
@@ -140,6 +153,7 @@ bool Command::run_built_in_command(string command)
     flag = true;
   }
 
+  //Changing Directory
   if( cmd=="chdir" )
   {
   	string temp = arguments.front();
@@ -154,6 +168,7 @@ bool Command::run_built_in_command(string command)
   	flag = true;
   }
 
+  //List Current Directory
   if( cmd=="dir" )
   {	
     cout << "Directory Listing: " << get_current_dir_name() << endl;
@@ -167,6 +182,7 @@ bool Command::run_built_in_command(string command)
     quit = true;
   }
 
+  //Parse error
   if (cmd=="PARSE_ERROR")
   {
     cout << "Parse error: " << arguments.front() << endl;
@@ -177,11 +193,13 @@ bool Command::run_built_in_command(string command)
   return flag;
 }
 
-// this will fork a new process and run the arguments held in argv and argc.
-// Thanks to http://tldp.org/LDP/lpg/node11.html for their tutorial on pipes
-// in C, which allowed me to handle user input with ampersands.
+//////////////////////////////////////////////////////////////////////////////////////
+//Function will fork a new process and run the arguments held in argv and argc.
+//Input:  None
+//Output: None
 void Command::run_cmd() {
-  prepare_argv(); // prepares argv and argc for exec()
+
+  prepare_argv(); // prepares argv and argc for execvp()
 
   pid_t pid;
   int in_file;
@@ -218,3 +236,29 @@ void Command::run_cmd() {
 }
 
 #endif
+
+
+string Command::to_string()
+{
+  string s = "Command: ";
+  s += name;
+  s += "\n";
+
+  string i=1;
+  for (list<string>::iterator it = arguments.begin(); it != arguments.end(); ++it)
+  {
+    s += "Token ";
+    s += i;
+    s += " ";
+    s += *it;
+    s += "\n";
+    i++;
+  }
+  
+  if (!infile.empty())  s += string(" < ").append(infile);
+  s += "\n";
+  if (!outfile.empty()) s += string(" > ").append(outfile);
+  s += "\n";
+  
+  return s;
+}
