@@ -40,8 +40,8 @@ public:
     void run_cmd();
     //For Running Built in Commands
     bool run_built_in_command(string command);
-
-    //string to_string();
+    //Converts command to string
+    // string to_string();
 
     static string prompt;   //Used for storing current prompt
     static bool debug;      //Used for activating debug
@@ -238,27 +238,24 @@ void Command::run_cmd() {
 #endif
 
 
-string Command::to_string()
-{
-  string s = "Command: ";
-  s += name;
-  s += "\n";
+// string Command::to_string()
+// {
+//   string s = "Command: ";
+//   s += name;
+//   s += "\n";
 
-  string i=1;
-  for (list<string>::iterator it = arguments.begin(); it != arguments.end(); ++it)
-  {
-    s += "Token ";
-    s += i;
-    s += " ";
-    s += *it;
-    s += "\n";
-    i++;
-  }
+//   for (list<string>::iterator it = arguments.begin(); it != arguments.end(); ++it)
+//   {
+//     s += "Token ";
+//     s += " ";
+//     s += *it;
+//     s += "\n";
+//   }
   
-  if (!infile.empty())  s += string(" < ").append(infile);
-  s += "\n";
-  if (!outfile.empty()) s += string(" > ").append(outfile);
-  s += "\n";
+//   if (!infile.empty())  s += string(" < ").append(infile);
+//   s += "\n";
+//   if (!outfile.empty()) s += string(" > ").append(outfile);
+//   s += "\n";
   
-  return s;
-}
+//   return s;
+// }
