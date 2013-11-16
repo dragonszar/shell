@@ -25,19 +25,22 @@ int main (int argc, char **argv)
   while( Command::quit == false )
   {
     cout << Command::prompt << " ";
-    list<string> args;
+    list<string> args1,args;
 
     // Getting Input
     string cinput;
     cin >> cinput;
 
+    args.push_back("on");
 
-    //args.push_back("-a");
-    //args.push_back("-l");
+    args1.push_back("-a");
+    args1.push_back("-l");
 
 
-    Command example("/bin/ls", args, "","");///home/student/Downloads/shell/progoutput.txt");
+    Command example("debug", args, "", "");
     example.execute();
+    Command example1("/bin/ls", args1, "","");///home/student/Downloads/shell/progoutput.txt");
+    example1.execute();
 
     /*
     list<Command> commands = parseForCommands(cinput);

@@ -12,6 +12,8 @@
 #include <cstring>
 #include <list>
 #include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -58,7 +60,7 @@ Command::Command (string n, list<string> arg, string in, string out)
 // Executing the command
 void Command::execute() 
 { 
-  if (debug) cout << to_string() << endl;
+  //if (debug) cout << to_string() << endl;
 	
   if( run_built_in_command(name) != true)
   {
@@ -66,21 +68,32 @@ void Command::execute()
   }   
 }
 
+/*
 string Command::to_string()
 {
   string s = "Command: ";
   s += name;
+  s += "\n";
 
+  string i=1;
   for (list<string>::iterator it = arguments.begin(); it != arguments.end(); ++it)
   {
+    s += "Token ";
+    s += i;
     s += " ";
     s += *it;
+    s += "\n";
+    i++;
   }
   
   if (!infile.empty())  s += string(" < ").append(infile);
+  s += "\n";
   if (!outfile.empty()) s += string(" > ").append(outfile);
+  s += "\n";
+  
   return s;
 }
+*/
 
 void Command::prepare_argv()
 {
@@ -213,7 +226,7 @@ void Command::run_cmd() {
     perror("execvp error");
 
   // parent process
-  } else if (!found_amp)
+  } else
     waitpid(pid, NULL, 0); // only wait if no ampersand
 }
 
