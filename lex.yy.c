@@ -756,7 +756,7 @@ YY_RULE_SETUP
 #line 19 "lex.yy.txt"
 {
             std::string text = yytext;
-            Token tkn (text, CTWord);
+            Token tkn (text, TTWord);
             lex_tokens.push_back(tkn);
             }
 	YY_BREAK
@@ -766,7 +766,7 @@ YY_RULE_SETUP
 #line 25 "lex.yy.txt"
 {
             std::string text = yytext;
-            Token tkn (text, CTString);
+            Token tkn (text, TTString);
             lex_tokens.push_back(tkn);
             }
 	YY_BREAK
@@ -775,7 +775,7 @@ YY_RULE_SETUP
 #line 31 "lex.yy.txt"
 {
             std::string text = yytext;
-            Token tkn (text, CTMeta);
+            Token tkn (text, TTMeta);
             lex_tokens.push_back(tkn);
             }
 	YY_BREAK
@@ -784,7 +784,7 @@ case 4:
 YY_RULE_SETUP
 #line 37 "lex.yy.txt"
 {  // end of line
-            Token tkn (std::string(""), CTEOL);
+            Token tkn (std::string(""), TTEOL);
             lex_tokens.push_back(tkn);
             }
 	YY_BREAK

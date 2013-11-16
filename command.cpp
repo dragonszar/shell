@@ -18,6 +18,7 @@ using namespace std;
 class Command
 {
 public:
+    Command ();
     Command (string);
     ~Command ();
     Command (string n, list<string> arg, string in, string out);
@@ -44,6 +45,7 @@ bool Command::debug = false;
 bool Command::quit = false;
 
 // Constructor
+Command::Command() {}
 Command::Command (string n) { name = n; }
 Command::~Command () {}
 Command::Command (string n, list<string> arg, string in, string out) 
@@ -58,7 +60,7 @@ Command::Command (string n, list<string> arg, string in, string out)
 // Executing the command
 void Command::execute() 
 { 
-  if (debug) cout << to_string() << endl;
+  // if (debug) cout << to_string() << endl;
 	
   if( run_built_in_command(name) != true)
   {
@@ -93,17 +95,16 @@ void Command::prepare_argv()
 	argv = new char*[argc];
 	argv[0] = temp;
 
-
- 	list<string>::iterator it = arguments.begin();
+  list<string>::iterator it = arguments.begin();
 
 	for (int i=0; i<size; i++)
 	{
 		temp = new char[it->size()+1];
 		strcpy (temp, it->c_str());
 		argv[i+1] = temp;
-    		it++;
+    it++;
 	}
-  	argv[size-1] = NULL;
+  argv[size-1] = NULL;
 
 }
 
@@ -213,8 +214,7 @@ void Command::run_cmd() {
     perror("execvp error");
 
   // parent process
-  } else if (!found_amp)
-    waitpid(pid, NULL, 0); // only wait if no ampersand
+  } else waitpid(pid, NULL, 0);
 }
 
 #endif

@@ -18,24 +18,24 @@ WORD     {NORMAL}+[{NORMAL}|{ESCMETA}]*
 
 {WORD}      {
             std::string text = yytext;
-            Token tkn (text, CTWord);
+            Token tkn (text, TTWord);
             lex_tokens.push_back(tkn);
             }
 
 {STRING}    {
             std::string text = yytext;
-            Token tkn (text, CTString);
+            Token tkn (text, TTString);
             lex_tokens.push_back(tkn);
             }
 
 {META}      {
             std::string text = yytext;
-            Token tkn (text, CTMeta);
+            Token tkn (text, TTMeta);
             lex_tokens.push_back(tkn);
             }
 
 \n+         {  // end of line
-            Token tkn (std::string(""), CTEOL);
+            Token tkn (std::string(""), TTEOL);
             lex_tokens.push_back(tkn);
             }
 

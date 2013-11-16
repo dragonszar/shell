@@ -18,7 +18,6 @@ run: all
 
 all: $(ShellOut) $(CmdOut) $(ScanOut) $(FlexOut)
 	g++ $(ShellOut) -lfl -o $(PROGRAM)
-	# -lfl loads flex libraries so ScanOut links properly.
 
 $(ShellOut): $(ShellSource)
 	g++ -c $(ShellSource)
@@ -37,8 +36,3 @@ $(FlexOut): $(FlexIn)
 
 clean:
 	rm $(PROGRAM) *.o
-
-
-scans: $(ScanOut) scanstub.cpp
-	g++ scanstub.cpp -lfl -o scans
-	./scans

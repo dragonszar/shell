@@ -4,10 +4,9 @@
 #include <string>
 #include <list>
 
-enum tkntype { 
-    CTWord,     CTString, 
-    CTMeta,     CTEOL 
-};
+enum tkntype { TTWord, TTString, TTMeta, TTEOL };
+
+std::string tkn_type_str[4] = { "Word", "String", "Meta", "EOL" };
 
 class Token {
 public:
